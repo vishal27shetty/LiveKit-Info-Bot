@@ -5,7 +5,7 @@ from livekit.agents import AgentServer,AgentSession, Agent, room_io
 from livekit.plugins import noise_cancellation, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
-load_dotenv(".env.local")
+load_dotenv(".env")
 
 
 class Assistant(Agent):

@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 
 from livekit import agents, rtc
-from livekit.agents import AgentServer,AgentSession, Agent, room_io, function_tool
+from livekit.agents import AgentServer,AgentSession, Agent, room_io, function_tool, RunContext
 from livekit.plugins import noise_cancellation, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
@@ -18,22 +18,6 @@ data = {
     } ,
 }
 
-@function_tool
-async def get_employee_directory(employee_name : str) -> str:
-    """
-     Look up employee contact details.
-
-    Use this tool when the user asks for an employee's email.
-    The input is the employee's first name.
-    Ensure you conver the name to lowercase and remove the apostrophe s
-    
-    Args:
-        employee_name: Name of the employee like John
-    """
-
-    return data[employee_name] 
-
-
 
 class Assistant(Agent):
     def __init__(self) -> None:
@@ -46,8 +30,27 @@ class Assistant(Agent):
             Dont give salary or any confidental information about the user only provide the contact details
             
             """,
-            tools = [get_employee_directory]
         )
+    @function_tool
+    async def get_employee_directory(self,employee_name : str, context: RunContext) -> str:
+        """
+        Look up employee contact details.
+
+        Use this tool when the user asks for an employee's email.
+        The input is the employee's first name.
+        Ensure you conver the name to lowercase and remove the apostrophe s
+        
+        Args:
+            employee_name: Name of the employee like John
+        """
+
+        if data.get(employee_name):
+            return data[employee_name]
+        else:
+            return "Employee doesnt exist in the directory"
+
+
+        
 
 server = AgentServer()
 

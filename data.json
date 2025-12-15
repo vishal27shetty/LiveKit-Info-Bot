@@ -1,0 +1,275 @@
+{
+  "vishalshetty": {
+    "name": "Vishal Shetty",
+    "email": "vishal.shetty@company.com",
+    "role": "AI Engineer Intern",
+    "department": "Engineering",
+    "salary": 200000
+  },
+  "vishalsethi": {
+    "name": "Vishal Sethi",
+    "email": "v.sethi@company.com",
+    "role": "Backend Developer",
+    "department": "Engineering",
+    "salary": 110000
+  },
+  "thomasharrison": {
+    "name": "Thomas Harrison",
+    "email": "thomas.h@company.com",
+    "role": "Chief Marketing Officer",
+    "department": "Marketing",
+    "salary": 250000
+  },
+  "thomasholt": {
+    "name": "Thomas Holt",
+    "email": "t.holt@company.com",
+    "role": "Frontend Engineer",
+    "department": "Engineering",
+    "salary": 95000
+  },
+  "sarahconrad": {
+    "name": "Sarah Conrad",
+    "email": "s.conrad@company.com",
+    "role": "Security Analyst",
+    "department": "Security",
+    "salary": 120000
+  },
+  "saraconnolly": {
+    "name": "Sara Connolly",
+    "email": "sara.connolly@company.com",
+    "role": "HR Generalist",
+    "department": "Human Resources",
+    "salary": 75000
+  },
+  "jamessmith": {
+    "name": "James Smith",
+    "email": "j.smith@company.com",
+    "role": "Senior DevOps Engineer",
+    "department": "Engineering",
+    "salary": 145000
+  },
+  "jamessmyth": {
+    "name": "James Smyth",
+    "email": "j.smyth@company.com",
+    "role": "QA Automation Lead",
+    "department": "Engineering",
+    "salary": 105000
+  },
+  "michaelscott": {
+    "name": "Michael Scott",
+    "email": "m.scott@company.com",
+    "role": "Regional Sales Director",
+    "department": "Sales",
+    "salary": 180000
+  },
+  "michaelross": {
+    "name": "Michael Ross",
+    "email": "m.ross@company.com",
+    "role": "Corporate Counsel",
+    "department": "Legal",
+    "salary": 160000
+  },
+  "mikejohnson": {
+    "name": "Mike Johnson",
+    "email": "mike.j@company.com",
+    "role": "Technical Recruiter",
+    "department": "Human Resources",
+    "salary": 85000
+  },
+  "williamgates": {
+    "name": "William Gates",
+    "email": "william.g@company.com",
+    "role": "Strategic Advisor",
+    "department": "Executive",
+    "salary": 0
+  },
+  "williambrown": {
+    "name": "William Brown",
+    "email": "w.brown@company.com",
+    "role": "Facilities Manager",
+    "department": "Operations",
+    "salary": 70000
+  },
+  "billwright": {
+    "name": "Bill Wright",
+    "email": "bill.w@company.com",
+    "role": "Financial Analyst",
+    "department": "Finance",
+    "salary": 90000
+  },
+  "robertjones": {
+    "name": "Robert Jones",
+    "email": "r.jones@company.com",
+    "role": "VP of Sales",
+    "department": "Sales",
+    "salary": 220000
+  },
+  "bobmartin": {
+    "name": "Bob Martin",
+    "email": "bob.m@company.com",
+    "role": "Sales Representative",
+    "department": "Sales",
+    "salary": 65000
+  },
+  "elizabethholmes": {
+    "name": "Elizabeth Holmes",
+    "email": "e.holmes@company.com",
+    "role": "Product Manager",
+    "department": "Product",
+    "salary": 135000
+  },
+  "lizholm": {
+    "name": "Liz Holm",
+    "email": "liz.h@company.com",
+    "role": "UX Researcher",
+    "department": "Design",
+    "salary": 95000
+  },
+  "davidpatel": {
+    "name": "David Patel",
+    "email": "d.patel@company.com",
+    "role": "Director of Finance",
+    "department": "Finance",
+    "salary": 195000
+  },
+  "davinderpatel": {
+    "name": "Davinder Patel",
+    "email": "davinder.p@company.com",
+    "role": "Payroll Specialist",
+    "department": "Finance",
+    "salary": 80000
+  },
+  "lisawong": {
+    "name": "Lisa Wong",
+    "email": "l.wong@company.com",
+    "role": "Chief Technology Officer",
+    "department": "Executive",
+    "salary": 280000
+  },
+  "lizawang": {
+    "name": "Liza Wang",
+    "email": "liza.w@company.com",
+    "role": "Executive Assistant",
+    "department": "Admin",
+    "salary": 80000
+  },
+  "alextaylor": {
+    "name": "Alex Taylor",
+    "email": "alex.t@company.com",
+    "role": "Backend Engineer II",
+    "department": "Engineering",
+    "salary": 115000
+  },
+  "alexataylor": {
+    "name": "Alexa Taylor",
+    "email": "alexa.t@company.com",
+    "role": "Product Designer",
+    "department": "Design",
+    "salary": 105000
+  },
+  "ryanlee": {
+    "name": "Ryan Lee",
+    "email": "ryan.l@company.com",
+    "role": "Mobile Developer",
+    "department": "Engineering",
+    "salary": 125000
+  },
+  "brianlee": {
+    "name": "Brian Lee",
+    "email": "brian.l@company.com",
+    "role": "iOS Engineer",
+    "department": "Engineering",
+    "salary": 130000
+  },
+  "catherinehigh": {
+    "name": "Catherine High",
+    "email": "c.high@company.com",
+    "role": "Communications Director",
+    "department": "Marketing",
+    "salary": 140000
+  },
+  "katherineheye": {
+    "name": "Katherine Heye",
+    "email": "k.heye@company.com",
+    "role": "Content Strategist",
+    "department": "Marketing",
+    "salary": 90000
+  },
+  "priyasharma": {
+    "name": "Priya Sharma",
+    "email": "p.sharma@company.com",
+    "role": "QA Engineer",
+    "department": "Engineering",
+    "salary": 95000
+  },
+  "priyankasharma": {
+    "name": "Priyanka Sharma",
+    "email": "priyanka.s@company.com",
+    "role": "Business Analyst",
+    "department": "Product",
+    "salary": 110000
+  },
+  "danielkim": {
+    "name": "Daniel Kim",
+    "email": "d.kim@company.com",
+    "role": "System Administrator",
+    "department": "IT",
+    "salary": 100000
+  },
+  "dannykim": {
+    "name": "Danny Kim",
+    "email": "danny.k@company.com",
+    "role": "IT Support Specialist",
+    "department": "IT",
+    "salary": 60000
+  },
+  "emilyclark": {
+    "name": "Emily Clark",
+    "email": "e.clark@company.com",
+    "role": "Office Manager",
+    "department": "Operations",
+    "salary": 65000
+  },
+  "steverogers": {
+    "name": "Steve Rogers",
+    "email": "steve.r@company.com",
+    "role": "Compliance Officer",
+    "department": "Legal",
+    "salary": 115000
+  },
+  "stephenrodgers": {
+    "name": "Stephen Rodgers",
+    "email": "stephen.rodgers@company.com",
+    "role": "Safety Inspector",
+    "department": "Operations",
+    "salary": 85000
+  },
+  "annakendrick": {
+    "name": "Anna Kendrick",
+    "email": "anna.k@company.com",
+    "role": "Training Coordinator",
+    "department": "HR",
+    "salary": 80000
+  },
+  "hannahkendrick": {
+    "name": "Hannah Kendrick",
+    "email": "hannah.k@company.com",
+    "role": "L&D Specialist",
+    "department": "HR",
+    "salary": 85000
+  },
+  "jasonbourne": {
+    "name": "Jason Bourne",
+    "email": "jason.b@company.com",
+    "role": "Penetration Tester",
+    "department": "Security",
+    "salary": 140000
+  },
+  "jasonborn": {
+    "name": "Jason Born",
+    "email": "jason.born@company.com",
+    "role": "Security Guard",
+    "department": "Security",
+    "salary": 45000
+  }
+}

@@ -5,14 +5,30 @@ from livekit.agents import AgentServer,AgentSession, Agent, room_io, function_to
 from livekit.plugins import noise_cancellation, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
+from google import genai
+from google.genai import types
+import numpy as np
+
+
+def cosine_sim(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+
 import json
 
 load_dotenv(".env")
 
+# Loading the dummy dataset
 with open('data.json', 'r') as file:
     data = json.load(file)
 
-print(data)
+client = genai.Client()
+
+employee_index = np.load(
+    "employee_embeddings.npy",
+    allow_pickle=True
+).tolist()
+
 print(type(data))
 class Assistant(Agent):
     def __init__(self) -> None:
@@ -22,7 +38,6 @@ class Assistant(Agent):
             Your responses are concise, to the point, and without any complex formatting or punctuation including emojis, asterisks, or other symbols.
             You are curious, friendly, and have a sense of humor. If the user asks about employee details such as email,
             You must use the employee directory tool for finding employee information instead of guessing.
-            You must ask for the last name if the user only tells the first name and the retrival doesnt happen.
             Dont give salary or any confidental information about the user only provide the contact details.
             """,
         )
@@ -32,18 +47,51 @@ class Assistant(Agent):
         Look up employee contact details.
 
         Use this tool when the user asks for an employee's email.
-        The input is the employee's first name and last name which is not separeted with a whitespace.
+        The input is the employee's first name and last name which is not separated with a whitespace.
         Ensure you conver the name to lowercase and remove the apostrophe S.
         
         Args:
             employee_name: Name of the employee like John
         """
         employee_name = employee_name.lower().strip()
-        print(employee_name)
-        if data[employee_name]:
-            return data[employee_name]
-        else:
-            return "Employee doesnt exist in the directory"
+
+        query_result = client.models.embed_content(
+        model="gemini-embedding-001",
+        contents=employee_name
+        )
+
+        query_embedding = np.array(
+        query_result.embeddings[0].values,
+        dtype=np.float32
+        )
+
+        top = []
+        
+        for item in employee_index:
+            score = cosine_sim(query_embedding, item["embedding"])
+            top.append((score, item["key"]))
+ 
+
+        top3 = sorted(top, reverse=True)[:3]
+
+        results = []
+        
+        for score, key in top3:
+            emp = data[key]
+            results.append({
+                "name": emp["name"],
+                "email": emp["email"],
+                "role": emp["role"],
+                "department": emp["department"],
+            })
+
+        return json.dumps(results)
+
+        # print(employee_name)
+        # if data[employee_name]:
+        #     return data[employee_name]
+        # else:
+        #     return "Employee doesnt exist in the directory"
 
 server = AgentServer()
 

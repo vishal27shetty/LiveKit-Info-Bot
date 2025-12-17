@@ -112,43 +112,43 @@ class Assistant(Agent):
         """
         employee_name = employee_name.lower().strip()
 
-        # query_result = client.models.embed_content(
-        # model="gemini-embedding-001",
-        # contents=employee_name
-        # )
+        query_result = client.models.embed_content(
+        model="gemini-embedding-001",
+        contents=employee_name
+        )
 
-        # query_embedding = np.array(
-        # query_result.embeddings[0].values,
-        # dtype=np.float32
-        # )
+        query_embedding = np.array(
+        query_result.embeddings[0].values,
+        dtype=np.float32
+        )
 
-        # top = []
+        top = []
         
-        # for item in employee_index:
-        #     score = cosine_sim(query_embedding, item["embedding"])
-        #     top.append((score, item["key"]))
+        for item in employee_index:
+            score = cosine_sim(query_embedding, item["embedding"])
+            top.append((score, item["key"]))
  
 
-        # top3 = sorted(top, reverse=True)[:3]
+        top3 = sorted(top, reverse=True)[:3]
 
-        # results = []
+        results = []
         
-        # for score, key in top3:
-        #     emp = data[key]
-        #     results.append({
-        #         "name": emp["name"],
-        #         "email": emp["email"],
-        #         "role": emp["role"],
-        #         "department": emp["department"],
-        #     })
+        for score, key in top3:
+            emp = data[key]
+            results.append({
+                "name": emp["name"],
+                "email": emp["email"],
+                "role": emp["role"],
+                "department": emp["department"],
+            })
 
-        # return json.dumps(results)
+        return json.dumps(results)
 
-        print(employee_name)
-        if data[employee_name]:
-            return data[employee_name]
-        else:
-            return "Employee doesnt exist in the directory"
+        # print(employee_name)
+        # if data[employee_name]:
+        #     return data[employee_name]
+        # else:
+        #     return "Employee doesnt exist in the directory"
 
 server = AgentServer()
 

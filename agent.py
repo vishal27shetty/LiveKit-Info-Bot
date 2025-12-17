@@ -1,13 +1,22 @@
+import logging
+
 from dotenv import load_dotenv
+
+logger = logging.getLogger("infobot-agent")
+logger.setLevel(logging.INFO)
 
 from livekit import agents, rtc
 from livekit.agents import AgentServer,AgentSession, Agent, room_io, function_tool, RunContext
 from livekit.plugins import noise_cancellation, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
+from livekit.agents.metrics import LLMMetrics, STTMetrics, TTSMetrics, EOUMetrics
+import asyncio
+
 from google import genai
 from google.genai import types
 import numpy as np
+
 
 
 def cosine_sim(a, b):
@@ -29,9 +38,10 @@ employee_index = np.load(
     allow_pickle=True
 ).tolist()
 
-print(type(data))
+
 class Assistant(Agent):
     def __init__(self) -> None:
+
         super().__init__(
             instructions="""You are a helpful voice AI assistant.
             You eagerly assist users with their questions by providing information from your extensive knowledge of different employees.
@@ -41,6 +51,53 @@ class Assistant(Agent):
             Dont give salary or any confidental information about the user only provide the contact details.
             """,
         )
+
+    async def on_enter(self):
+        def llm_metrics_wrapper(metrics: LLMMetrics):
+            asyncio.create_task(self.on_llm_metrics_collected(metrics))
+        def stt_metrics_wrapper(metrics: LLMMetrics):
+            asyncio.create_task(self.on_stt_metrics_collected(metrics))
+        def eou_metrics_wrapper(metrics: LLMMetrics):
+            asyncio.create_task(self.on_eou_metrics_collected(metrics))
+        def tts_metrics_wrapper(metrics: LLMMetrics):    
+            asyncio.create_task(self.on_tts_metrics_collected(metrics))
+    
+        
+        self.session.llm.on("metrics_collected", llm_metrics_wrapper)
+        self.session.stt.on("metrics_collected", stt_metrics_wrapper)
+        self.session.stt.on("eou_metrics_collected", eou_metrics_wrapper)
+        self.session.tts.on("metrics_collected", tts_metrics_wrapper)
+        self.session.generate_reply()
+
+    async def on_llm_metrics_collected(self, metrics: LLMMetrics) -> None:
+        print("\n--- LLM Metrics ---")
+        print(f"Prompt Tokens: {metrics.prompt_tokens}")
+        print(f"Completion Tokens: {metrics.completion_tokens}")
+        print(f"Tokens per second: {metrics.tokens_per_second:.4f}")
+        print(f"TTFT: {metrics.ttft:.4f}s")
+        print("------------------\n")
+
+    async def on_stt_metrics_collected(self, metrics: STTMetrics) -> None:
+        print("\n--- STT Metrics ---")
+        print(f"Duration: {metrics.duration:.4f}s")
+        print(f"Audio Duration: {metrics.audio_duration:.4f}s")
+        print(f"Streamed: {'Yes' if metrics.streamed else 'No'}")
+        print("------------------\n")
+
+    async def on_eou_metrics_collected(self, metrics: EOUMetrics) -> None:
+        print("\n--- End of Utterance Metrics ---")
+        print(f"End of Utterance Delay: {metrics.end_of_utterance_delay:.4f}s")
+        print(f"Transcription Delay: {metrics.transcription_delay:.4f}s")
+        print("--------------------------------\n")
+
+    async def on_tts_metrics_collected(self, metrics: TTSMetrics) -> None:
+        print("\n--- TTS Metrics ---")
+        print(f"TTFB: {metrics.ttfb:.4f}s")
+        print(f"Duration: {metrics.duration:.4f}s")
+        print(f"Audio Duration: {metrics.audio_duration:.4f}s")
+        print(f"Streamed: {'Yes' if metrics.streamed else 'No'}")
+        print("------------------\n")
+
     @function_tool
     async def get_employee_directory(self,employee_name : str, context: RunContext) -> str:
         """
@@ -55,43 +112,43 @@ class Assistant(Agent):
         """
         employee_name = employee_name.lower().strip()
 
-        query_result = client.models.embed_content(
-        model="gemini-embedding-001",
-        contents=employee_name
-        )
+        # query_result = client.models.embed_content(
+        # model="gemini-embedding-001",
+        # contents=employee_name
+        # )
 
-        query_embedding = np.array(
-        query_result.embeddings[0].values,
-        dtype=np.float32
-        )
+        # query_embedding = np.array(
+        # query_result.embeddings[0].values,
+        # dtype=np.float32
+        # )
 
-        top = []
+        # top = []
         
-        for item in employee_index:
-            score = cosine_sim(query_embedding, item["embedding"])
-            top.append((score, item["key"]))
+        # for item in employee_index:
+        #     score = cosine_sim(query_embedding, item["embedding"])
+        #     top.append((score, item["key"]))
  
 
-        top3 = sorted(top, reverse=True)[:3]
+        # top3 = sorted(top, reverse=True)[:3]
 
-        results = []
+        # results = []
         
-        for score, key in top3:
-            emp = data[key]
-            results.append({
-                "name": emp["name"],
-                "email": emp["email"],
-                "role": emp["role"],
-                "department": emp["department"],
-            })
+        # for score, key in top3:
+        #     emp = data[key]
+        #     results.append({
+        #         "name": emp["name"],
+        #         "email": emp["email"],
+        #         "role": emp["role"],
+        #         "department": emp["department"],
+        #     })
 
-        return json.dumps(results)
+        # return json.dumps(results)
 
-        # print(employee_name)
-        # if data[employee_name]:
-        #     return data[employee_name]
-        # else:
-        #     return "Employee doesnt exist in the directory"
+        print(employee_name)
+        if data[employee_name]:
+            return data[employee_name]
+        else:
+            return "Employee doesnt exist in the directory"
 
 server = AgentServer()
 

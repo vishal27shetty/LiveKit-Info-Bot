@@ -8,5 +8,4 @@ dependencies = [
     "livekit-plugins-noise-cancellation~=0.2",
     "numpy>=2.3.5",
     "python-dotenv>=1.2.1",
-    "scikit-learn>=1.8.0",
 ]

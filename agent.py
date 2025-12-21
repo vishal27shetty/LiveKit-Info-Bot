@@ -14,8 +14,9 @@ from livekit.agents.metrics import LLMMetrics, STTMetrics, TTSMetrics, EOUMetric
 import asyncio
 
 from google import genai
-from google.genai import types
 import numpy as np
+
+from livekit.plugins import groq
 
 
 
@@ -156,7 +157,7 @@ server = AgentServer()
 async def my_agent(ctx: agents.JobContext):
     session = AgentSession(
         stt="assemblyai/universal-streaming:en",
-        llm="openai/gpt-4.1-mini",
+        llm=groq.LLM(model="llama-3.3-70b-versatile"),
         tts="cartesia/sonic-3:9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
         vad=silero.VAD.load(),
         turn_detection=MultilingualModel(),

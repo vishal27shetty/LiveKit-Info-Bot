@@ -33,3 +33,8 @@ Thumbs.db
 
 # LiveKit / cache
 .cache/
+
+
+# Node 
+
+node_modules/

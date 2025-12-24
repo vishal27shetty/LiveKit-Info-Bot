@@ -16,7 +16,7 @@ class CreateRoom(Resource):
             async with lk_api.LiveKitAPI() as lkapi:
                 await lkapi.room.create_room(
                     lk_api.CreateRoomRequest(
-                        name="info-bot",
+                        name="info-bot-2",
                         empty_timeout=10 * 60,
                         max_participants=20,
                     )
@@ -24,11 +24,11 @@ class CreateRoom(Resource):
         asyncio.run(create_room())
     
         token = lk_api.AccessToken(os.getenv('LIVEKIT_API_KEY'), os.getenv('LIVEKIT_API_SECRET')) \
-            .with_identity("identity-h8U3") \
+            .with_identity("agent-AJ_GCTNz4waAwhE") \
             .with_name("info-agent") \
             .with_grants(lk_api.VideoGrants(
                 room_join=True,
-                room="info-bot",
+                room="info-bot-2",
             )).to_jwt()
 
         return {"token": token}

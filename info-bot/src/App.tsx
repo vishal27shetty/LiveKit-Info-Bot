@@ -2,9 +2,22 @@ import { useState, useEffect } from 'react';
 import {
   LiveKitRoom,
   RoomAudioRenderer,
-  ConnectionState,
+  AudioConference,
+  useVoiceAssistant,
+  BarVisualizer
 } from "@livekit/components-react";
 import "@livekit/components-styles"; 
+
+function SimpleVoiceAssistant() {
+  // Get the agent's audio track and current state
+  const { state, audioTrack } = useVoiceAssistant();
+  return (
+    <div className="h-80">
+      <BarVisualizer state={state} barCount={5} trackRef={audioTrack} style={{}} />
+      <p className="text-center">{state}</p>
+    </div>
+  );
+}
 
 const MyLiveKitApp = () => {
   const [token, setToken] = useState("");
@@ -29,12 +42,13 @@ const MyLiveKitApp = () => {
     >
       <div style={{ padding: 20 }}>
         <h3>LiveKit Basic UI</h3>
-
-        {/* shows Connecting / Connected / Disconnected */}
-        <ConnectionState />
-
         {/* required to hear audio */}
         <RoomAudioRenderer />
+   
+        <SimpleVoiceAssistant />
+        
+        <AudioConference />
+     
       </div>
     </LiveKitRoom>
   );

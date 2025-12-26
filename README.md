@@ -1,40 +1,48 @@
 # LiveKit Info Bot
 
-**Eightfold.ai Assignment Submission**
+> **Eightfold.ai Assignment Submission** > An intelligent Voice AI agent capable of searching employee records and answering general knowledge questions in real-time.
 
-An intelligent Voice AI agent capable of searching employee records and answering general knowledge questions in real-time..
+![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-green?logo=node.js&logoColor=white)
+![LiveKit](https://img.shields.io/badge/LiveKit-Real--Time-purple?logo=livekit&logoColor=white)
+![Vite](https://img.shields.io/badge/Frontend-Vite-646CFF?logo=vite&logoColor=white)
+
+---
 
 ## Architecture
 
 The project consists of three main components:
 
-- **Frontend** (`/info-bot`): A React/Vite application that handles the UI and connects to the LiveKit room.
-- **Token Server** (`app.py`): A Flask-RESTX backend that authenticates users and generates LiveKit access tokens.
-- **Voice Agent** (`agent.py`): The core logic powered by the LiveKit Python SDK, managing the conversational loop and LLM integration.
+1.  **Frontend (`/info-bot`)**: A React/Vite application that handles the UI and connects to the LiveKit room.
+2.  **Token Server (`app.py`)**: A Flask-RESTX backend that authenticates users and generates LiveKit access tokens.
+3.  **Voice Agent (`agent.py`)**: The core logic powered by the LiveKit Python SDK, managing the conversational loop and LLM integration.
+
+---
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
-- **Python 3.13**
-- **Node.js 18+** & npm
-- **uv** (Python package manager)
-  ```bash
-  pip install uv
-  ```
-- **API Keys**:
-  - LiveKit Cloud (URL, Key, Secret)
-  - Groq API
-  - Google Gemini API
+* **Python 3.13**
+* **Node.js 18+** & **npm**
+* **[uv](https://github.com/astral-sh/uv)** (Python package manager)
+    ```bash
+    pip install uv
+    ```
+* **API Keys**:
+    * [LiveKit Cloud](https://cloud.livekit.io/) (URL, Key, Secret)
+    * [Groq API](https://console.groq.com/)
+    * [Google Gemini API](https://aistudio.google.com/)
 
-## Setup & Installation
+---
+
+## 🚀 Setup & Installation
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/vishal27shetty/LiveKit-Info-Bot.git
 cd LiveKit-Info-Bot
-```
 
 ### 2. Backend Setup (Python)
 

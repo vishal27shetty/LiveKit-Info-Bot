@@ -1,7 +1,7 @@
 # LiveKit Info Bot
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-18%2B-green?logo=node.js&logoColor=white)
+![Flask-RESTX](https://img.shields.io/badge/Flask_RESTX-1.0+-4B8BBE?logo=flask&logoColor=white)
 ![LiveKit](https://img.shields.io/badge/LiveKit-Real--Time-purple?logo=livekit&logoColor=white)
 ![React](https://img.shields.io/badge/Frontend-React-20232A?logo=react&logoColor=61DAFB)
 

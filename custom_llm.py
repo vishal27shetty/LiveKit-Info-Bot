@@ -56,9 +56,9 @@ class CustomLLM(llm.LLM):
     def __init__(
         self,
         *,
-        model: str = "gpt-4o-mini",
-        api_key: NotGivenOr[str] = os.getenv("OPEN_API_KEY"),
-        base_url: NotGivenOr[str] = NOT_GIVEN,
+        model: str = "openai/gpt-oss-20b",
+        api_key: NotGivenOr[str] = os.getenv("GROQ_API_KEY"),
+        base_url: NotGivenOr[str] = "https://api.groq.com/openai/v1",
         client: openai.AsyncClient | None = None,
         user: NotGivenOr[str] = NOT_GIVEN,
         safety_identifier: NotGivenOr[str] = NOT_GIVEN,
@@ -231,17 +231,13 @@ class CustomLLM(llm.LLM):
             conn_options=conn_options,
             extra_kwargs=extra,
         )
-    
-    
-    
-
 
 class LLMStream(_LLMStream):
     def __init__(
         self,
         llm: CustomLLM,
         *,
-        model: str = "gpt-4o-mini",
+        model: str = "openai/gpt-oss-20b",
         provider_fmt: str,
         strict_tool_schema: bool,
         client: openai.AsyncClient,

@@ -1,86 +1,123 @@
-# LiveKit-Info-Bot
+# LiveKit Info Bot
 
-**Eightfold.ai Assignment Submission**  
-An intelligent Voice AI agent that helps search employee email id and an answer general knowledge questions.
+**Eightfold.ai Assignment Submission**
 
-## Setup Instructions
+An intelligent Voice AI agent capable of searching employee records and answering general knowledge questions in real-time..
 
-### Prerequisites
+## Architecture
 
-- **Python 3.13** 
-- **Node.js 18+** and npm
-- API Keys:
-  - Livekit API
+The project consists of three main components:
+
+- **Frontend** (`/info-bot`): A React/Vite application that handles the UI and connects to the LiveKit room.
+- **Token Server** (`app.py`): A Flask-RESTX backend that authenticates users and generates LiveKit access tokens.
+- **Voice Agent** (`agent.py`): The core logic powered by the LiveKit Python SDK, managing the conversational loop and LLM integration.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Python 3.13**
+- **Node.js 18+** & npm
+- **uv** (Python package manager)
+  ```bash
+  pip install uv
+  ```
+- **API Keys**:
+  - LiveKit Cloud (URL, Key, Secret)
   - Groq API
   - Google Gemini API
 
-## Setup
+## Setup & Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/vishal27shetty/LiveKit-Info-Bot.git
-   cd LiveKit-Info-Bot
-   ```
-2. **Create virtual environment**
-  ```bash
-    python -m venv .venv
-    source .venv/bin/activate
-  ```
-3. Sync the dependencies
-   ```bash
-   uv sync
-   ```
+### 1. Clone the Repository
 
-4. Set .env file in root directory
-   ```bash
-    LIVEKIT_URL=YOUR_LIVEKIT_URL
-    LIVEKIT_API_KEY=YOUR_LIVEKIT_API_KEY
-    LIVEKIT_API_SECRET=YOUR_LIVEKIT_API_SECRET
-    GROQ_API_KEY =YOUR_GROQ_API_KEY
-    GEMINI_API_KEY= YOUR_GEMINI_API_KEY
-    ```
-5. Set .env file in frontend directory
-    ```bash
-    VITE_LIVEKIT_URL=YOUR_LIVEKIT_URL
-    ```
-6. Run the frontend
-    ```bash
-    cd info-bot
-    npm install
-    npm run dev
-    ```
-    The frontend will be running on http://localhost:5173/
-7. Run the backend
-  ```bash
-    uv run app.py
-  ```
-  The backend will be running on http://127.0.0.1:5000
-  
-8. Run the livekit voice agent
-   ```bash
-    uv run agent.py dev
-    ```
+```bash
+git clone https://github.com/vishal27shetty/LiveKit-Info-Bot.git
+cd LiveKit-Info-Bot
+```
 
-## Task Success Criteria
+### 2. Backend Setup (Python)
 
-### Part 1: The Core Agent (Backend/LiveKit Agent Logic)
- It has been completed in the agent.py file
+Initialize the environment and install dependencies using uv.
 
+```bash
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-### Part 1.5: API Backend for Token Generation (Flask-RESTX)
- It has been completed in the agent.py file
+# Sync dependencies
+uv sync
+```
 
+**Configure Environment Variables:**
 
-### Part 2: The User Interface (Frontend)
- It has been completed in the info-bot
+Create a `.env` file in the root directory:
 
+```
+LIVEKIT_URL=wss://your-project.livekit.cloud
+LIVEKIT_API_KEY=your_api_key
+LIVEKIT_API_SECRET=your_api_secret
+GROQ_API_KEY=your_groq_api_key
+GEMINI_API_KEY=your_gemini_api_key
+```
 
-### Part 3: Advanced Customization (Bonus Task)
- It has been completed in the custom.llm
+### 3. Frontend Setup (React/Vite)
 
+Navigate to the frontend directory and install dependencies.
 
-  
+```bash
+cd info-bot
+npm install
+```
 
+**Configure Environment Variables:**
 
+Create a `.env` file in the `info-bot` directory:
 
+```
+VITE_LIVEKIT_URL=wss://your-project.livekit.cloud
+```
 
+## Usage
+
+To run the full application, you will need to run the **Frontend**, **Token Server**, and **Voice Agent** in separate terminals.
+
+### Terminal 1: Frontend Client
+
+Starts the web interface where you can interact with the bot.
+
+```bash
+cd info-bot
+npm run dev
+```
+
+**Access at:** http://localhost:5173/
+
+### Terminal 2: Token Server
+
+Starts the Flask backend to provision access tokens for the frontend.
+
+```bash
+# Ensure you are in the root directory and .venv is active
+uv run app.py
+```
+
+**Running at:** http://127.0.0.1:5000
+
+### Terminal 3: Voice Agent
+
+Starts the AI agent that joins the LiveKit room to listen and respond.
+
+```bash
+# Ensure you are in the root directory and .venv is active
+uv run agent.py dev
+```
+
+## Task Completion Status
+
+| Component | Description | Status |
+|-----------|-------------|--------|
+| **PART 1: Core Agent** | `agent.py`: Main conversational logic | ✅ Completed |
+| **PART 1.5: API Backend** | `app.py`: Token generation via Flask-RESTX | ✅ Completed |
+| **PART 2: User Interface** | `info-bot`: Frontend UI | ✅ Completed |
+| **PART 3: Bonus Task** | `custom_llm.py`: Advanced LLM customization | ✅ Completed |

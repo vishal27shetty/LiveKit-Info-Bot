@@ -174,9 +174,6 @@ async def my_agent(ctx: agents.JobContext):
         ),
     )
 
-    await session.generate_reply(
-        instructions="Greet the user and offer your assistance."
-    )
 
 
 if __name__ == "__main__":

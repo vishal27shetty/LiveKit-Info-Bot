@@ -1,6 +1,5 @@
 # LiveKit-Info-Bot
 
-**Eightfold.ai Assignment Submission**  
 An intelligent Voice AI agent that helps search employee email id and an answer general knowledge questions.
 
 ## Setup Instructions

@@ -1,7 +1,5 @@
 # LiveKit Info Bot
 
-> **Eightfold.ai Assignment Submission** > An intelligent Voice AI agent capable of searching employee records and answering general knowledge questions in real-time.
-
 ![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-green?logo=node.js&logoColor=white)
 ![LiveKit](https://img.shields.io/badge/LiveKit-Real--Time-purple?logo=livekit&logoColor=white)

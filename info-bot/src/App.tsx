@@ -4,7 +4,8 @@ import {
   RoomAudioRenderer,
   AudioConference,
   useVoiceAssistant,
-  BarVisualizer
+  BarVisualizer,
+  FocusLayout,
 } from "@livekit/components-react";
 import "@livekit/components-styles"; 
 
@@ -33,6 +34,7 @@ const MyLiveKitApp = () => {
 
   console.log("Token state:", token);
   return (
+
     <LiveKitRoom
       serverUrl={import.meta.env.VITE_LIVEKIT_URL}
       token={token}
@@ -40,7 +42,13 @@ const MyLiveKitApp = () => {
       audio={true}
       video={false}
     >
-      <div style={{ padding: 20 }}>
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+      }}>
         <h3>LiveKit Basic UI</h3>
         {/* required to hear audio */}
         <RoomAudioRenderer />

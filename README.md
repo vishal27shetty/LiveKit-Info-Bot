@@ -43,7 +43,7 @@ Before you begin, ensure you have the following installed:
 ```bash
 git clone https://github.com/vishal27shetty/LiveKit-Info-Bot.git
 cd LiveKit-Info-Bot
-
+```
 ### 2. Backend Setup (Python)
 
 Initialize the environment and install dependencies using uv.
@@ -52,8 +52,9 @@ Initialize the environment and install dependencies using uv.
 # Create virtual environment
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Sync dependencies
+```
+### 3. Sync dependencies
+```bash
 uv sync
 ```
 
@@ -69,7 +70,7 @@ GROQ_API_KEY=your_groq_api_key
 GEMINI_API_KEY=your_gemini_api_key
 ```
 
-### 3. Frontend Setup (React/Vite)
+### 4. Frontend Setup (React/Vite)
 
 Navigate to the frontend directory and install dependencies.
 

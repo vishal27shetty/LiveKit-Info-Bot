@@ -239,16 +239,9 @@ uv run agent.py dev
 
 ## Task Completion Status
 
-
-
 | Component | Description | Status |
-
-|-----------|-------------|--------|
-
+| :--- | :--- | :---: |
 | **PART 1: Core Agent** | `agent.py`: Main conversational logic | ✅ Completed |
-
 | **PART 1.5: API Backend** | `app.py`: Token generation via Flask-RESTX | ✅ Completed |
-
 | **PART 2: User Interface** | `info-bot`: Frontend UI | ✅ Completed |
-
 | **PART 3: Bonus Task** | `custom_llm.py`: Advanced LLM customization | ✅ Completed |

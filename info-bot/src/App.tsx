@@ -42,13 +42,7 @@ const MyLiveKitApp = () => {
       audio={true}
       video={false}
     >
-      <div style={{ 
-        height: '100vh', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'center', 
-        alignItems: 'center' 
-      }}>
+      <div style={{textAlign:'center'}}>
         <h3>LiveKit Basic UI</h3>
         {/* required to hear audio */}
         <RoomAudioRenderer />

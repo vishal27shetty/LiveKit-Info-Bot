@@ -2,15 +2,44 @@ name: Deploy to LiveKit Cloud
 
 on:
   workflow_dispatch:
+  push:
     branches:
       - main
+    paths:
+      - '**/*.py'
+      - 'pyproject.toml'
+      - 'Dockerfile'
+      - 'livekit.toml'
+      - '.github/workflows/deploy.yml'
 
 jobs:
-  deploy-behavioural:
+  validate-branch:
+    name: Validate Branch
     runs-on: ubuntu-latest
+    steps:
+      - name: Check if main branch
+        run: |
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+            echo "❌ Error: This workflow can only be run on the main branch"
+            echo "Current branch: ${{ github.ref }}"
+            echo "Please switch to main branch and try again"
+            exit 1
+          fi
+          echo "✅ Running on main branch"
+
+  deploy-behavioural:
+    name: Deploy Behavioural Interview Agent
+    needs: validate-branch
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: deploy-behavioural
+      cancel-in-progress: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Update config for behavioural_interview_agent
         run: |
@@ -20,19 +49,37 @@ jobs:
       - name: Deploy behavioural_interview_agent
         uses: livekit/deploy-action@v2.12.1
         env:
-          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
-          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
           SECRET_LIST: ${{ secrets.SECRET_LIST }}
         with:
           OPERATION: deploy
           WORKING_DIRECTORY: .
 
+      - name: Check deployment status
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status
+          WORKING_DIRECTORY: .
+
   deploy-coding:
+    name: Deploy Coding Interview Agent
     runs-on: ubuntu-latest
     needs: deploy-behavioural
+    environment: production
+    concurrency:
+      group: deploy-coding
+      cancel-in-progress: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Update config for coding_interview_agent
         run: |
@@ -42,19 +89,37 @@ jobs:
       - name: Deploy coding_interview_agent
         uses: livekit/deploy-action@v2.12.1
         env:
-          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
-          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
           SECRET_LIST: ${{ secrets.SECRET_LIST }}
         with:
           OPERATION: deploy
           WORKING_DIRECTORY: .
 
+      - name: Check deployment status
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status
+          WORKING_DIRECTORY: .
+
   deploy-screening:
+    name: Deploy Profile Screening Agent
     runs-on: ubuntu-latest
     needs: deploy-coding
+    environment: production
+    concurrency:
+      group: deploy-screening
+      cancel-in-progress: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Update config for profile_screening_agent
         run: |
@@ -64,19 +129,37 @@ jobs:
       - name: Deploy profile_screening_agent
         uses: livekit/deploy-action@v2.12.1
         env:
-          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
-          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
           SECRET_LIST: ${{ secrets.SECRET_LIST }}
         with:
           OPERATION: deploy
           WORKING_DIRECTORY: .
 
+      - name: Check deployment status
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status
+          WORKING_DIRECTORY: .
+
   deploy-voice-kit:
+    name: Deploy Voice Conversation Kit Agent
     runs-on: ubuntu-latest
     needs: deploy-screening
+    environment: production
+    concurrency:
+      group: deploy-voice-kit
+      cancel-in-progress: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Update config for agent_conversation_voice_kit
         run: |
@@ -86,19 +169,37 @@ jobs:
       - name: Deploy agent_conversation_voice_kit
         uses: livekit/deploy-action@v2.12.1
         env:
-          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
-          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
           SECRET_LIST: ${{ secrets.SECRET_LIST }}
         with:
           OPERATION: deploy
           WORKING_DIRECTORY: .
 
+      - name: Check deployment status
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status
+          WORKING_DIRECTORY: .
+
   deploy-health-check:
+    name: Deploy Health Check Agent
     runs-on: ubuntu-latest
     needs: deploy-voice-kit
+    environment: production
+    concurrency:
+      group: deploy-health-check
+      cancel-in-progress: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Update config for health_check_agent
         run: |
@@ -108,19 +209,37 @@ jobs:
       - name: Deploy health_check_agent
         uses: livekit/deploy-action@v2.12.1
         env:
-          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
-          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
           SECRET_LIST: ${{ secrets.SECRET_LIST }}
         with:
           OPERATION: deploy
           WORKING_DIRECTORY: .
 
+      - name: Check deployment status
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status
+          WORKING_DIRECTORY: .
+
   deploy-interview-x:
+    name: Deploy Interview X Agent
     runs-on: ubuntu-latest
     needs: deploy-health-check
+    environment: production
+    concurrency:
+      group: deploy-interview-x
+      cancel-in-progress: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Update config for interview_x_agent
         run: |
@@ -130,9 +249,39 @@ jobs:
       - name: Deploy interview_x_agent
         uses: livekit/deploy-action@v2.12.1
         env:
-          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
-          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
           SECRET_LIST: ${{ secrets.SECRET_LIST }}
         with:
           OPERATION: deploy
           WORKING_DIRECTORY: .
+
+      - name: Check deployment status
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status
+          WORKING_DIRECTORY: .
+
+  deployment-complete:
+    name: Deployment Complete
+    runs-on: ubuntu-latest
+    needs: [deploy-behavioural, deploy-coding, deploy-screening, deploy-voice-kit, deploy-health-check, deploy-interview-x]
+    steps:
+      - name: Summary
+        run: |
+          echo "✅ All LiveKit agents deployed successfully!"
+          echo ""
+          echo "Deployed agents:"
+          echo "  1. Behavioural Interview Agent (CA_DWZAYG6NYJM)"
+          echo "  2. Coding Interview Agent (CA_XA5t9Yd47ekmr)"
+          echo "  3. Profile Screening Agent (CA_t0YmcntXAdem)"
+          echo "  4. Voice Conversation Kit Agent (CA_UH6tQ98bhbWMW)"
+          echo "  5. Health Check Agent (CA_vB6xAdmVBafH)"
+          echo "  6. Interview X Agent (CA_6349Tkt1ZhHq)"
+          echo ""
+          echo "All agents are now running on LiveKit Cloud"

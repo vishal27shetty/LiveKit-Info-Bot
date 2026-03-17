@@ -1,0 +1,116 @@
+name: Manual Deploy or Create Agent
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: 'Operation to perform'
+        required: true
+        type: choice
+        options:
+          - deploy
+          - create
+        default: 'deploy'
+
+jobs:
+  create-agent:
+    name: Create New LiveKit Agent
+    runs-on: ubuntu-latest
+    if: github.event.inputs.operation == 'create'
+    environment: production
+    concurrency:
+      group: livekit-agent-operations
+      cancel-in-progress: true
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create LiveKit Cloud Agent
+        id: livekit
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+          SECRET_LIST: GROQ_API_KEY=${{ secrets.GROQ_API_KEY }},GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          OPERATION: create
+          WORKING_DIRECTORY: .
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          add-paths: |
+            livekit.toml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: cloud-agent-${{ github.run_id }}
+          title: "Add LiveKit agent configuration"
+          commit-message: "Add LiveKit agent config with agent ID"
+          body: |
+            This PR adds the LiveKit agent configuration with the assigned agent ID.
+            
+            The agent has been created and deployed to LiveKit Cloud.
+          base: main
+          delete-branch: true
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: cloud-agent-${{ github.run_id }}
+
+      - name: Status Check
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status-retry
+          WORKING_DIRECTORY: .
+          TIMEOUT: 5m
+
+  deploy-agent:
+    name: Deploy Existing Agent
+    runs-on: ubuntu-latest
+    if: github.event.inputs.operation == 'deploy'
+    environment: production
+    concurrency:
+      group: livekit-agent-operations
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy LiveKit Info Bot Agent
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+          SECRET_LIST: GROQ_API_KEY=${{ secrets.GROQ_API_KEY }},GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+        with:
+          OPERATION: deploy
+          WORKING_DIRECTORY: .
+
+      - name: Check deployment status
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status-retry
+          WORKING_DIRECTORY: .
+          TIMEOUT: 5m
+
+      - name: Deployment successful
+        run: |
+          echo "✅ LiveKit Info Bot deployed successfully!"
+          echo "Agent is now running on LiveKit Cloud"

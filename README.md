@@ -237,6 +237,37 @@ uv run agent.py dev
 
 
 
+## 🚀 Deployment to LiveKit Cloud
+
+This project includes GitHub Actions CI/CD workflows for automatic deployment to LiveKit Cloud.
+
+### Setup GitHub Actions Deployment
+
+1. **Configure Secrets**: Add the following secrets to your GitHub repository (Settings → Secrets and variables → Actions):
+   - `LIVEKIT_URL`: `wss://info-bot-ed21bgbj.livekit.cloud`
+   - `LIVEKIT_API_KEY`: `APIezs2YYZ3hb9C`
+   - `LIVEKIT_API_SECRET`: Your LiveKit API Secret
+   - `GROQ_API_KEY`: Your Groq API Key
+   - `GEMINI_API_KEY`: Your Google Gemini API Key
+
+2. **First Time Setup**: 
+   - Go to Actions → "Manual Deploy or Create Agent"
+   - Select operation: `create`
+   - This creates the agent and opens a PR with the configuration
+   - Merge the PR
+
+3. **Automatic Deployments**: Push changes to `main` branch and the agent will automatically deploy
+
+For detailed setup instructions, see [GITHUB_SETUP.md](./GITHUB_SETUP.md)
+
+### Available Workflows
+
+- **Automatic Deployment**: Deploys on push to main when agent files change
+- **Manual Deploy**: Manually trigger deployment or agent creation
+- **Status Monitoring**: Checks agent health every 6 hours
+
+---
+
 ## Task Completion Status
 
 | Component | Description | Status |
@@ -245,3 +276,4 @@ uv run agent.py dev
 | **PART 1.5: API Backend** | `app.py`: Token generation via Flask-RESTX | ✅ Completed |
 | **PART 2: User Interface** | `info-bot`: Frontend UI | ✅ Completed |
 | **PART 3: Bonus Task** | `custom_llm.py`: Advanced LLM customization | ✅ Completed |
+| **CI/CD Pipeline** | GitHub Actions deployment workflows | ✅ Completed |

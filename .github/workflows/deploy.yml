@@ -1,0 +1,156 @@
+name: Deploy to LiveKit Cloud
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+
+jobs:
+  verify-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Wait for CI to complete
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.ref }}
+          check-name: test
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+
+      - name: CI Status Check
+        run: echo "CI passed! Proceeding with deployment..."
+
+  deploy-behavioural:
+    needs: verify-ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update config for behavioural_interview_agent
+        run: |
+          sed -i 's/id = "CA_[^"]*"/id = "CA_DWZAYG6NYJM"/' livekit.toml
+          sed -i 's|src/agents/[^"]*\.py|src/agents/behavioural_interview_agent.py|g' Dockerfile
+
+      - name: Deploy behavioural_interview_agent
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
+          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          SECRET_LIST: ${{ secrets.SECRET_LIST }}
+        with:
+          OPERATION: deploy
+          WORKING_DIRECTORY: .
+
+  deploy-coding:
+    runs-on: ubuntu-latest
+    needs: deploy-behavioural
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update config for coding_interview_agent
+        run: |
+          sed -i 's/id = "CA_[^"]*"/id = "CA_XA5t9Yd47ekmr"/' livekit.toml
+          sed -i 's|src/agents/[^"]*\.py|src/agents/coding_interview_agent.py|g' Dockerfile
+
+      - name: Deploy coding_interview_agent
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
+          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          SECRET_LIST: ${{ secrets.SECRET_LIST }}
+        with:
+          OPERATION: deploy
+          WORKING_DIRECTORY: .
+
+  deploy-screening:
+    runs-on: ubuntu-latest
+    needs: deploy-coding
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update config for profile_screening_agent
+        run: |
+          sed -i 's/id = "CA_[^"]*"/id = "CA_t0YmcntXAdem"/' livekit.toml
+          sed -i 's|src/agents/[^"]*\.py|src/agents/screening_interview_agent.py|g' Dockerfile
+
+      - name: Deploy profile_screening_agent
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
+          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          SECRET_LIST: ${{ secrets.SECRET_LIST }}
+        with:
+          OPERATION: deploy
+          WORKING_DIRECTORY: .
+
+  deploy-voice-kit:
+    runs-on: ubuntu-latest
+    needs: deploy-screening
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update config for agent_conversation_voice_kit
+        run: |
+          sed -i 's/id = "CA_[^"]*"/id = "CA_UH6tQ98bhbWMW"/' livekit.toml
+          sed -i 's|src/agents/[^"]*\.py|src/agents/ef_converse_kit.py|g' Dockerfile
+
+      - name: Deploy agent_conversation_voice_kit
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
+          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          SECRET_LIST: ${{ secrets.SECRET_LIST }}
+        with:
+          OPERATION: deploy
+          WORKING_DIRECTORY: .
+
+  deploy-health-check:
+    runs-on: ubuntu-latest
+    needs: deploy-voice-kit
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update config for health_check_agent
+        run: |
+          sed -i 's/id = "CA_[^"]*"/id = "CA_vB6xAdmVBafH"/' livekit.toml
+          sed -i 's|src/agents/[^"]*\.py|src/agents/health_check_agent.py|g' Dockerfile
+
+      - name: Deploy health_check_agent
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
+          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          SECRET_LIST: ${{ secrets.SECRET_LIST }}
+        with:
+          OPERATION: deploy
+          WORKING_DIRECTORY: .
+
+  deploy-interview-x:
+    runs-on: ubuntu-latest
+    needs: deploy-health-check
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update config for interview_x_agent
+        run: |
+          sed -i 's/id = "CA_[^"]*"/id = "CA_6349Tkt1ZhHq"/' livekit.toml
+          sed -i 's|src/agents/[^"]*\.py|src/agents/interview_x_agent.py|g' Dockerfile
+
+      - name: Deploy interview_x_agent
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_EIGHTFOLD_API_KEY: ${{ secrets.LIVEKIT_EIGHTFOLD_API_KEY }}
+          LIVEKIT_EIGHTFOLD_API_SECRET: ${{ secrets.LIVEKIT_EIGHTFOLD_API_SECRET }}
+          SECRET_LIST: ${{ secrets.SECRET_LIST }}
+        with:
+          OPERATION: deploy
+          WORKING_DIRECTORY: .

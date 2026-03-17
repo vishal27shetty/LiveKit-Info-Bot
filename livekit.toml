@@ -1,0 +1,22 @@
+[project]
+# LiveKit Cloud Agent configuration
+name = "livekit-info-bot"
+id = "CA_InfoBot001"  # This will be assigned by LiveKit Cloud on first deploy
+version = "0.1.0"
+description = "LiveKit Info Bot - Employee Directory Voice Assistant"
+
+[agent]
+# Entry point for the agent
+entry_point = "agent.py"
+# Python runtime version
+runtime = "python:3.13"
+
+[resources]
+# Resource allocation for the agent
+cpu = "1"
+memory = "2Gi"
+
+[environment]
+# Environment variables will be loaded from GitHub secrets
+# LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET are automatically provided
+# GROQ_API_KEY and GEMINI_API_KEY should be set via SECRET_LIST in GitHub Actions

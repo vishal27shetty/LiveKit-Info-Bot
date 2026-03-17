@@ -1,0 +1,33 @@
+name: Monitor Agent Status
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+
+jobs:
+  check-status:
+    name: Check LiveKit Agent Status
+    runs-on: ubuntu-latest
+    concurrency:
+      group: livekit-status-check
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Agent Status
+        uses: livekit/deploy-action@v2.12.1
+        env:
+          LIVEKIT_URL: ${{ secrets.LIVEKIT_URL }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+        with:
+          OPERATION: status
+          WORKING_DIRECTORY: .
+
+      - name: Report Status
+        run: |
+          echo "Status check completed for LiveKit Info Bot"
+          echo "Check the logs above for detailed status information"

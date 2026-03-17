@@ -6,25 +6,7 @@ on:
       - main
 
 jobs:
-  verify-ci:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Wait for CI to complete
-        uses: lewagon/wait-on-check-action@v1.3.4
-        with:
-          ref: ${{ github.ref }}
-          check-name: test
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-
-      - name: CI Status Check
-        run: echo "CI passed! Proceeding with deployment..."
-
   deploy-behavioural:
-    needs: verify-ci
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
